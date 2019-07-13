@@ -1,6 +1,5 @@
 import * as faker from 'faker';
 import { Readable } from 'stream';
-import logger from './logger';
 
 const htmlBody =
   '<!DOCTYPE html>\n' +

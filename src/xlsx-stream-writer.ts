@@ -12,6 +12,18 @@ const defaultOptions: XlsxStreamWriterOptions = {
   inlineStrings: false,
   styles: [],
   styleIdFunc: (value: any, columnId: number, rowId: number) => 0,
+  zip: {
+    type: 'nodebuffer',
+    compression: 'DEFLATE',
+    compressionOptions: {
+      level: 1,
+    },
+    streamFiles: true,
+  },
+  buffer: {
+    frequency: 10, // in milliseconds.
+    chunkSize: 2048, // in bytes.
+  },
 };
 
 export class XlsxStreamWriter {
@@ -27,15 +39,9 @@ export class XlsxStreamWriter {
 
   constructor(options?: Partial<XlsxStreamWriterOptions>) {
     this.options = Object.assign(defaultOptions, options);
-    this.sheetXmlStream = new streamBuffers.ReadableStreamBuffer({
-      frequency: 1, // in milliseconds.
-      chunkSize: 2048, // in bytes.
-    });
 
-    this.sharedStringsXmlStream = new streamBuffers.ReadableStreamBuffer({
-      frequency: 1, // in milliseconds.
-      chunkSize: 2048, // in bytes.
-    });
+    this.sheetXmlStream = new streamBuffers.ReadableStreamBuffer(this.options.buffer);
+    this.sharedStringsXmlStream = new streamBuffers.ReadableStreamBuffer(this.options.buffer);
     this.sharedStringsArr = [];
     this.sharedStringsMap = {};
     this.sharedStringsHashMap = {};
@@ -210,14 +216,7 @@ export class XlsxStreamWriter {
   }
 
   getStream(): NodeJS.ReadableStream {
-    return this.zip.generateNodeStream({
-      type: 'nodebuffer',
-      compression: 'DEFLATE',
-      compressionOptions: {
-        level: 1,
-      },
-      streamFiles: true,
-    });
+    return this.zip.generateNodeStream(this.options.zip);
   }
 }
 

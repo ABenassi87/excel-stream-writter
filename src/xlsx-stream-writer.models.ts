@@ -1,8 +1,11 @@
+import { ReadableStreamBufferOptions } from "stream-buffers";
+
 export interface XlsxStreamWriterOptions {
   inlineStrings: boolean;
   styles: XLSXStyle[];
   styleIdFunc: (value: any, columnId: number, rowId: number) => number;
   zip?: ArchiverZipOptions;
+  buffer?: ReadableStreamBufferOptions;
 }
 
 interface ArchiverZipOptions {
