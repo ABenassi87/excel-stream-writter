@@ -4,8 +4,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   entry: {
-    'xlsx-writer-stream': './src/xlsx-stream-writer.ts',
-    'xlsx-writer-stream.min': './src/xlsx-stream-writer.ts',
+    'excel-writer-stream': './src/xlsx-stream-writer.ts',
+    'excel-writer-stream.min': './src/xlsx-stream-writer.ts',
   },
   module: {
     rules: [
