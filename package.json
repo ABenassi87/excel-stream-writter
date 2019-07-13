@@ -1,6 +1,6 @@
 {
-  "name": "xlsx-stream-writer",
-  "version": "0.2.6",
+  "name": "excel-stream-writer",
+  "version": "1.0.0",
   "description": "Create xlsx in streaming mode in browser and nodejs",
   "main": "dist/xlsx-stream-writer.js",
   "scripts": {
@@ -22,7 +22,7 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "author": "Valery Baranov <valery@baranov.xyz> (http://baranov.xyz)",
+  "author": "Alfredo Benassi <alfrebenassi@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
@@ -31,7 +31,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/baranovxyz/xlsx-stream-writer.git"
+    "url": "https://github.com/ABenassi87/excel-stream-writter.git"
   },
   "keywords": [
     "excel",
