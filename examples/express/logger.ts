@@ -1,8 +1,13 @@
 import { createLogger, format, transports } from 'winston';
 
-const { label, combine, timestamp, prettyPrint } = format;
+const { combine, timestamp, label, colorize, printf } = format;
+
+const myFormat = printf(({ level, message, label, timestamp }) => {
+  return `[${timestamp}] [${label}] ${level}: ${message}`;
+});
+
 const logger = createLogger({
-  format: combine(timestamp(), prettyPrint()),
+  format: combine(label({ label: 'XLSX-Writer' }), timestamp(), colorize(), myFormat),
   transports: [
     new transports.Console(),
     new transports.File({ filename: './error.log', level: 'error' }),

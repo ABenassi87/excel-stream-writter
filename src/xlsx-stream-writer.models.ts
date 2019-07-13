@@ -1,10 +1,11 @@
-import { ReadableStreamBufferOptions } from "stream-buffers";
+import { ReadableStreamBufferOptions } from 'stream-buffers';
+import * as JSZip from 'jszip';
 
 export interface XlsxStreamWriterOptions {
   inlineStrings: boolean;
   styles: XLSXStyle[];
   styleIdFunc: (value: any, columnId: number, rowId: number) => number;
-  zip?: ArchiverZipOptions;
+  zip?: JSZip.JSZipGeneratorOptions<'nodebuffer'>;
   buffer?: ReadableStreamBufferOptions;
 }
 

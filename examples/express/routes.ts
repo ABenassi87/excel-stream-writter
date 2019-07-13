@@ -18,35 +18,46 @@ function generateFile(req: Request, res: Response) {
 
   res.setHeader('Content-Type', 'application/vnd.openxmlformats');
   res.setHeader('Content-Disposition', 'attachment; filename=' + 'example.xlsx');
-  let i = 0;
 
   const readable = xlsxWriter.getStream();
+
+  populateData(xlsxWriter)
+    .then(() => xlsxWriter.commit())
+    .catch(err => logger.error(err));
+
   readable
-    .on('data', (data: Buffer) => {
-      res.write(data, 'buffer');
-    })
     .on('end', function() {
       logger.info('zip stream ended.');
+    })
+    .pipe(res)
+    .on('finish', function() {
+      // JSZip generates a readable stream with a "end" event,
+      // but is piped here in a writable stream which emits a "finish" event.
+      logger.info('zip finished.');
     });
-  readable.pipe(res);
+}
 
-  const q = async.queue((data: { rows: any[] }, callback) => {
-    xlsxWriter.addRows(data.rows);
-    callback();
-  }, 3);
+function populateData(xlsxWriter: XlsxStreamWriter): Promise<void> {
+  return new Promise((resolve, reject) => {
+    logger.info('populateData');
+    const q = async.queue((data: { rows: any[] }, callback) => {
+      xlsxWriter.addRows(data.rows);
+      callback();
+    }, 3);
 
-  // assign a callback
-  q.drain(function() {
-    console.log('all items have been processed');
-    xlsxWriter.commit();
+    // assign a callback
+    q.drain(function() {
+      logger.info('all items have been processed');
+      resolve();
+    });
+
+    for (let j = 0; j < 10; j++) {
+      const rowsData: any[] = generateRandomData(500);
+      q.push({ rows: rowsData }, err => {
+        logger.info('Added new data.');
+      });
+    }
   });
-
-  for (let j = 0; j < 10; j++) {
-    const rowsData: any[] = generateRandomData(500);
-    q.push({ rows: rowsData }, err => {
-      logger.info('Added new data.');
-    });
-  }
 }
 
 export default applicationRoutes;
