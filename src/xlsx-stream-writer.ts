@@ -4,6 +4,7 @@ import * as xmlParts from './xml/parts';
 import { sheetFooter, sheetHeader } from './xml/parts';
 import { escapeXml, getCellAddress, is } from './helpers';
 import { getStyles } from './styles';
+import { SheetReadableStream } from './readable/SheetReadableStream';
 import * as streamBuffers from 'stream-buffers';
 
 const JSZip = require('jszip');
@@ -40,6 +41,8 @@ export class XlsxStreamWriter {
   constructor(options?: Partial<XlsxStreamWriterOptions>) {
     this.options = Object.assign(defaultOptions, options);
 
+    /*this.sheetXmlStream = new SheetReadableStream();
+    this.sharedStringsXmlStream = new SheetReadableStream();*/
     this.sheetXmlStream = new streamBuffers.ReadableStreamBuffer(this.options.buffer);
     this.sharedStringsXmlStream = new streamBuffers.ReadableStreamBuffer(this.options.buffer);
     this.sharedStringsArr = [];
