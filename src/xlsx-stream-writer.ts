@@ -4,7 +4,6 @@ import * as xmlParts from './xml/parts';
 import { sheetFooter, sheetHeader } from './xml/parts';
 import { escapeXml, getCellAddress, is } from './helpers';
 import { getStyles } from './styles';
-import { SheetReadableStream } from './readable/SheetReadableStream';
 import * as streamBuffers from 'stream-buffers';
 
 const JSZip = require('jszip');

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { generateRandomData, getData } from './helper';
+import { getData } from './helper';
 import { XlsxStreamWriter } from '../../src/xlsx-stream-writer';
 import logger from './logger';
 import * as async from 'async';
