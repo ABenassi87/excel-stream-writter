@@ -1,4 +1,5 @@
 import * as faker from 'faker';
+import axios from 'axios';
 import { Readable } from 'stream';
 
 const htmlBody =
@@ -23,56 +24,58 @@ const htmlBody =
   '</body>\n' +
   '</html>\n';
 
-export function generateRandomData(count: number, generateHeader = false): any[] {
-  let dataArray: any[] = [];
-  if (generateHeader) {
-    const header = [
-      'firstName',
-      'lastName',
-      'streetAddress',
-      'birthdate',
-      'ssin',
-      'valid',
-      'city',
-      'state',
-      'country',
-      'email',
-      'avatar',
-      'card',
-      'userCard',
-      'transaction',
-      'test1',
-      'test2',
-      'test3',
-      'htmlBody',
-    ];
-    dataArray.push(header);
-  }
-  for (let i = 0; i < count; i++) {
-    const data = [
-      faker.name.firstName(),
-      faker.name.lastName(),
-      faker.address.streetAddress(true),
-      faker.date.past(),
-      faker.random.number(),
-      faker.random.number() % 2 === 0,
-      faker.address.city(),
-      faker.address.state(),
-      faker.address.country(),
-      faker.internet.email(),
-      faker.internet.avatar(),
-      faker.helpers.createCard(),
-      faker.helpers.userCard(),
-      faker.helpers.createTransaction(),
-      faker.helpers.randomize(),
-      faker.helpers.shuffle(),
-      faker.helpers.slugify(),
-      htmlBody,
-    ];
+export function generateRandomData(count: number, generateHeader = false): Promise<any[]> {
+  return new Promise<any[]>((resolve, reject) => {
+    let dataArray: any[] = [];
+    if (generateHeader) {
+      const header = [
+        'firstName',
+        'lastName',
+        'streetAddress',
+        'birthdate',
+        'ssin',
+        'valid',
+        'city',
+        'state',
+        'country',
+        'email',
+        'avatar',
+        'card',
+        'userCard',
+        'transaction',
+        'test1',
+        'test2',
+        'test3',
+        'htmlBody',
+      ];
+      dataArray.push(header);
+    }
+    for (let i = 0; i < count; i++) {
+      const data = [
+        faker.name.firstName(),
+        faker.name.lastName(),
+        faker.address.streetAddress(true),
+        faker.date.past(),
+        faker.random.number(),
+        faker.random.number() % 2 === 0,
+        faker.address.city(),
+        faker.address.state(),
+        faker.address.country(),
+        faker.internet.email(),
+        faker.internet.avatar(),
+        faker.helpers.createCard(),
+        faker.helpers.userCard(),
+        faker.helpers.createTransaction(),
+        faker.helpers.randomize(),
+        faker.helpers.shuffle(),
+        faker.helpers.slugify(),
+        htmlBody,
+      ];
 
-    dataArray.push(data);
-  }
-  return dataArray;
+      dataArray.push(data);
+    }
+    resolve(dataArray);
+  });
 }
 
 export function wrapRowsInStream(rows: any[]): Readable {
@@ -84,4 +87,27 @@ export function wrapRowsInStream(rows: any[]): Readable {
     c++;
   };
   return rs;
+}
+
+export function getData(includeHeader?: boolean): Promise<any[]> {
+  return new Promise<any[]>(resolve => {
+    const rows: any[] = [];
+    axios.get('https://jsonplaceholder.typicode.com/comments').then(response => {
+      const data = response.data;
+      if (Array.isArray(data)) {
+        data.forEach((d: any) => {
+          if (includeHeader) {
+            const header = Object.keys(d);
+            rows.push(header);
+            includeHeader = false;
+          }
+
+          const row = Object.keys(d).map(key => d[key]);
+          rows.push(row);
+        });
+      }
+
+      resolve(rows);
+    });
+  });
 }
