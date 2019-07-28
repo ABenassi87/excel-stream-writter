@@ -1,10 +1,7 @@
 .idea
-.DS_Store
 node_modules
+.clinic
 **/*.xlsx
 **/*.log
 **/*.xml
-result**
-dist
-.clinic
-*.log
+**/.env

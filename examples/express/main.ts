@@ -16,4 +16,4 @@ app.listen(port, () => {
   logger.info(`server started at http://localhost:${port}`);
 });
 
-/*require('appmetrics-dash').monitor();*/
+// require('appmetrics-dash').monitor();

@@ -55,7 +55,6 @@ export class XlsxStreamWriter {
       '[Content_Types].xml': cleanUpXml(xmlBlobs.contentTypes),
       '_rels/.rels': cleanUpXml(xmlBlobs.rels),
       'xl/workbook.xml': cleanUpXml(xmlBlobs.workbook),
-      // "xl/styles.xml": cleanUpXml(xmlBlobs.styles),
       'xl/styles.xml': cleanUpXml(getStyles(this.options.styles)),
       'xl/_rels/workbook.xml.rels': cleanUpXml(xmlBlobs.workbookRels),
     };
